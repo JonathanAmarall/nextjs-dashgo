@@ -1,0 +1,6 @@
+build
+coverage
+.next
+package.json
+node_modules
+next-env.d.ts

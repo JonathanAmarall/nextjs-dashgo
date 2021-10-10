@@ -1,0 +1,62 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  td,
+  th {
+    border: 1px solid rgb(105, 105, 105);
+    text-align: center;
+    padding: 8px;
+  }
+}
+
+.button_container {
+  float: right;
+  margin: 5px;
+}
+
+.button {
+  height: 35px;
+  background-color: cornflowerblue;
+
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: snow;
+
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.form {
+  width: 100%;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+
+  div {
+    padding-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+    label {
+      font-size: 12px;
+      font-weight: bold;
+      padding-bottom: 2px;
+    }
+
+    input {
+      height: 30px;
+    }
+  }
+
+  .form_buttons {
+    display: flex;
+    flex-direction: row;
+
+    button {
+      margin: 2px;
+    }
+  }
+}
