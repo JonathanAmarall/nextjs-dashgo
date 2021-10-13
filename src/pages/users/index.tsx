@@ -14,17 +14,22 @@ import {
   Text,
   useBreakpointValue,
   Spinner,
-  Link,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
-
+import Link from 'next/link';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Header } from '../../components/Header/Index';
 import { Sidebar } from '../../components/Sidebar';
 import { Pagination } from '../../components/Pagination';
 
 export default function UserList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
   const isLoading = true;
   const isFetching = false;
+
   return (
     <Box>
       <Header />
@@ -39,15 +44,17 @@ export default function UserList() {
                 <Spinner size="sm" color="gray.500" ml="4" />
               )}
             </Heading>
-            <Button
-              as="a"
-              size="sm"
-              colorScheme="pink"
-              leftIcon={<Icon as={RiAddLine} />}
-              fontSize="20"
-            >
-              Criar novo
-            </Button>
+            <Link href="/users/create" passHref>
+              <Button
+                as="a"
+                size="sm"
+                colorScheme="pink"
+                leftIcon={<Icon as={RiAddLine} />}
+                fontSize="20"
+              >
+                Criar novo
+              </Button>
+            </Link>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
@@ -57,7 +64,7 @@ export default function UserList() {
                   <Checkbox colorScheme="pink" />
                 </Th>
                 <Th>Usuário</Th>
-                <Th>Data de cadastro</Th>
+                {isWideVersion && <Th>Data de cadastro</Th>}
                 <Th width="8"></Th>
               </Tr>
             </Thead>
@@ -68,16 +75,15 @@ export default function UserList() {
                 </Td>
                 <Td>
                   <Box>
-                    <Link color="purple.400" onMouseEnter={() => {}}>
-                      {' '}
+                    <ChakraLink color="purple.400" onMouseEnter={() => {}}>
                       Jonathan Amaral
-                    </Link>
+                    </ChakraLink>
                     <Text fontSize="sm" color="gray.300">
                       itsjon@gmail.com
                     </Text>
                   </Box>
                 </Td>
-                <Td>14/10/2021</Td>
+                {isWideVersion && <Td>14/10/2021</Td>}
                 <Td>
                   <Button
                     as="a"
@@ -86,7 +92,88 @@ export default function UserList() {
                     leftIcon={<Icon as={RiPencilLine} />}
                     fontSize="16"
                   >
-                    Editar
+                    {isWideVersion ? 'Editar' : ''}
+                  </Button>
+                </Td>
+              </Tr>
+              <Tr>
+                <Td px={['4', '4', '6']}>
+                  <Checkbox colorScheme="pink" />
+                </Td>
+                <Td>
+                  <Box>
+                    <ChakraLink color="purple.400" onMouseEnter={() => {}}>
+                      Jonathan Amaral
+                    </ChakraLink>
+                    <Text fontSize="sm" color="gray.300">
+                      itsjon@gmail.com
+                    </Text>
+                  </Box>
+                </Td>
+                {isWideVersion && <Td>14/10/2021</Td>}
+                <Td>
+                  <Button
+                    as="a"
+                    size="sm"
+                    colorScheme="purple"
+                    leftIcon={<Icon as={RiPencilLine} />}
+                    fontSize="16"
+                  >
+                    {isWideVersion ? 'Editar' : ''}
+                  </Button>
+                </Td>
+              </Tr>
+              <Tr>
+                <Td px={['4', '4', '6']}>
+                  <Checkbox colorScheme="pink" />
+                </Td>
+                <Td>
+                  <Box>
+                    <ChakraLink color="purple.400" onMouseEnter={() => {}}>
+                      Jonathan Amaral
+                    </ChakraLink>
+                    <Text fontSize="sm" color="gray.300">
+                      itsjon@gmail.com
+                    </Text>
+                  </Box>
+                </Td>
+                {isWideVersion && <Td>14/10/2021</Td>}
+                <Td>
+                  <Button
+                    as="a"
+                    size="sm"
+                    colorScheme="purple"
+                    leftIcon={<Icon as={RiPencilLine} />}
+                    fontSize="16"
+                  >
+                    {isWideVersion ? 'Editar' : ''}
+                  </Button>
+                </Td>
+              </Tr>
+              <Tr>
+                <Td px={['4', '4', '6']}>
+                  <Checkbox colorScheme="pink" />
+                </Td>
+                <Td>
+                  <Box>
+                    <ChakraLink color="purple.400" onMouseEnter={() => {}}>
+                      Jonathan Amaral
+                    </ChakraLink>
+                    <Text fontSize="sm" color="gray.300">
+                      itsjon@gmail.com
+                    </Text>
+                  </Box>
+                </Td>
+                {isWideVersion && <Td>14/10/2021</Td>}
+                <Td>
+                  <Button
+                    as="a"
+                    size="sm"
+                    colorScheme="purple"
+                    leftIcon={<Icon as={RiPencilLine} />}
+                    fontSize="16"
+                  >
+                    {isWideVersion ? 'Editar' : ''}
                   </Button>
                 </Td>
               </Tr>
