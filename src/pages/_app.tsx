@@ -3,6 +3,7 @@ import { AppProps } from 'next/dist/shared/lib/router/router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { SideBarDrawerProvider } from '../contexts/SidebarDrawerContext';
 import { makeServer } from '../services/mirage';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import '../styles/global.scss';
 import { theme } from '../styles/theme';
@@ -21,6 +22,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </SideBarDrawerProvider>
         </ChakraProvider>
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </>
   );
