@@ -11,11 +11,11 @@ export const userService = {
   getAll,
   create,
   update,
+  remove,
 };
 
 async function getAll(): Promise<IUser[]> {
   const { data, status } = await api.get<IUser[]>('users');
-  console.log(status);
   return data;
 }
 
@@ -25,4 +25,8 @@ async function create(data: IUser): Promise<AxiosResponse<IUser>> {
 
 async function update(id: string, data: IUser): Promise<AxiosResponse<IUser>> {
   return api.put(`/users/${id}`, data);
+}
+
+async function remove(id: string): Promise<AxiosResponse<IUser>> {
+  return api.delete(`/users/${id}`);
 }
