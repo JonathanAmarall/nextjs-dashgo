@@ -1,9 +1,10 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { SideBarDrawerProvider } from '../contexts/SidebarDrawerContext';
+import { GlobalContextProvider } from '../contexts/GlobalContext';
 import { makeServer } from '../services/mirage';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { AuthProvider } from '../contexts/AuthContext';
 
 import '../styles/global.scss';
 import { theme } from '../styles/theme';
@@ -18,11 +19,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     <>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
-          <SideBarDrawerProvider>
+          <GlobalContextProvider>
             <Component {...pageProps} />
-          </SideBarDrawerProvider>
+          </GlobalContextProvider>
         </ChakraProvider>
-        {process.env.NODE_ENV === 'development' ? <ReactQueryDevtools /> : null}
+        {/* {process.env.NODE_ENV === 'development' ? <ReactQueryDevtools /> : null} */}
       </QueryClientProvider>
     </>
   );

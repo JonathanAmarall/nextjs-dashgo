@@ -14,7 +14,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const AuthContext = createContext({} as AuthContextData);
+export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const isAthenticated = false;
@@ -22,8 +22,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     console.log({ email, password });
   }
   return (
-    <AuthContext.Provider
-      value={{ isAthenticated, signIn }}
-    ></AuthContext.Provider>
+    <AuthContext.Provider value={{ isAthenticated, signIn }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
