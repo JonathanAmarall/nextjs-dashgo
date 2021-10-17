@@ -21,10 +21,11 @@ import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Header } from '../../components/Header/Index';
 import { Sidebar } from '../../components/Sidebar';
 import { Pagination } from '../../components/Pagination';
-import { useUsers } from '../../services/hooks/useUsers';
+import { getUsers, useUsers } from '../../services/hooks/useUsers';
 import { useState } from 'react';
 import { queryClient } from '../../services/queryClient';
 import { api } from '../../services/api';
+import { GetServerSideProps } from 'next';
 
 export default function UserList() {
   const [page, setPage] = useState(1);
@@ -35,7 +36,7 @@ export default function UserList() {
     lg: true,
   });
 
-  async function handlePrefetchUser(userId: number) {
+  async function handlePrefetchUser(userId: string) {
     await queryClient.prefetchQuery(
       ['users', userId],
       async () => {
@@ -145,3 +146,12 @@ export default function UserList() {
     </Box>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { users } = await getUsers(1);
+  return {
+    props: {
+      users,
+    },
+  };
+};
