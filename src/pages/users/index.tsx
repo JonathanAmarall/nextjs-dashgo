@@ -23,6 +23,8 @@ import { Sidebar } from '../../components/Sidebar';
 import { Pagination } from '../../components/Pagination';
 import { useUsers } from '../../services/hooks/useUsers';
 import { useState } from 'react';
+import { queryClient } from '../../services/queryClient';
+import { api } from '../../services/api';
 
 export default function UserList() {
   const [page, setPage] = useState(1);
@@ -32,6 +34,19 @@ export default function UserList() {
     base: false,
     lg: true,
   });
+
+  async function handlePrefetchUser(userId: number) {
+    await queryClient.prefetchQuery(
+      ['users', userId],
+      async () => {
+        const response = await api.get(`users/${userId}`);
+        return response.data;
+      },
+      {
+        staleTime: 1000 * 60 * 10, // 10 minutos em cash
+      }
+    );
+  }
 
   return (
     <Box>
@@ -84,7 +99,7 @@ export default function UserList() {
                 <Tbody>
                   {data.users.map((user) => {
                     return (
-                      <Tr>
+                      <Tr key={user.id}>
                         <Td px={['4', '4', '6']}>
                           <Checkbox colorScheme="pink" />
                         </Td>
@@ -92,7 +107,7 @@ export default function UserList() {
                           <Box>
                             <ChakraLink
                               color="purple.400"
-                              onMouseEnter={() => {}}
+                              onMouseEnter={() => handlePrefetchUser(user.id)}
                             >
                               {user.name}
                             </ChakraLink>

@@ -22,7 +22,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </SideBarDrawerProvider>
         </ChakraProvider>
-        <ReactQueryDevtools />
+        {process.env.NODE_ENV === 'development' ? <ReactQueryDevtools /> : null}
       </QueryClientProvider>
     </>
   );
