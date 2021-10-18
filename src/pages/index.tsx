@@ -1,12 +1,20 @@
 import { Flex } from '@chakra-ui/layout';
-import { Button, Stack, FormControl } from '@chakra-ui/react';
+import {
+  Button,
+  Stack,
+  FormControl,
+  useToast,
+  ToastOptions,
+} from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Input } from '../components/Form/Input';
 
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useContext } from 'react';
-import { AuthContext, AuthProvider } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
+import React from 'react';
+import { useRouter } from 'next/dist/client/router';
 
 type SignInFormData = {
   email: string;
@@ -19,8 +27,12 @@ const signInFormSchema = yup.object().shape({
 });
 
 export default function SignIn() {
+  const toast = useToast();
+  const toastIdRef = React.useRef<any>();
+  const router = useRouter();
   const { signIn } = useContext(AuthContext);
   const {
+    reset,
     register,
     handleSubmit,
     formState,
@@ -30,7 +42,8 @@ export default function SignIn() {
   });
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (values, event) => {
-    await signIn(values);
+    if (!(await signIn(values))) reset({ password: '', email: values.email });
+    router.push('/dashboard');
   };
 
   return (

@@ -10,7 +10,7 @@ import '../styles/global.scss';
 import { theme } from '../styles/theme';
 
 if (process.env.NODE_ENV === 'development') {
-  makeServer();
+  //makeServer();
 }
 
 export default function MyApp({ Component, pageProps }: AppProps) {
