@@ -1,5 +1,6 @@
 import { parseCookies, setCookie } from 'nookies';
 import axios, { AxiosError } from 'axios';
+import { signOut } from '../contexts/AuthContext';
 
 let cookies = parseCookies();
 
@@ -44,7 +45,7 @@ api.interceptors.response.use(
 
               setCookie(
                 undefined,
-                'nextauxh.refreshToken',
+                'nextauth.refreshToken',
                 res.data.refreshToken,
                 {
                   maxAge: 60 * 60 * 24 * 30, // 30 days
@@ -83,10 +84,13 @@ api.interceptors.response.use(
         });
       } else {
         // deslogar usuario
+        signOut();
       }
     }
 
     if (error.response.status == 500) {
     }
+
+    return Promise.reject(error);
   }
 );

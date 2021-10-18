@@ -1,8 +1,9 @@
 import React from 'react';
-import { setCookie, parseCookies } from 'nookies';
+import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import { useToast } from '@chakra-ui/react';
 import { createContext, ReactNode, useState, useEffect } from 'react';
 import { api } from '../services/api';
+import router from 'next/router';
 
 const TOKEN_COOKIE_NAME = 'nextauth.token';
 const REFRESH_TOKEN_COOKIE_NAME = 'nextauth.refreshToken';
@@ -27,6 +28,12 @@ interface AuthContextData {
 interface AuthProviderProps {
   children: ReactNode;
 }
+export function signOut() {
+  destroyCookie(undefined, 'nextauth.token');
+  destroyCookie(undefined, 'nextauth.refreshToken');
+
+  router.push('/');
+}
 
 export const AuthContext = createContext({} as AuthContextData);
 
@@ -39,15 +46,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   /**Chamado toda vez que e */
   useEffect(() => {
-    try {
-      const { 'nextauth.token': token } = parseCookies();
-      if (token) {
-        api.get('/me').then((res) => {
+    const { 'nextauth.token': token } = parseCookies();
+    if (token) {
+      api
+        .get('/me')
+        .then((res) => {
           const { email, roles, permissions } = res.data;
           setUser({ email, roles, permissions });
+        })
+        .catch((err) => {
+          console.log('ERRO', err);
+          signOut();
         });
-      }
-    } catch (error) {}
+    } else {
+      signOut();
+    }
   }, []);
 
   async function signIn({
