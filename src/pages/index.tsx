@@ -42,7 +42,13 @@ export default function SignIn() {
   });
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (values, event) => {
-    if (!(await signIn(values))) reset({ password: '', email: values.email });
+    const signInSuccess = await signIn(values);
+    console.log('signInSuccess', signInSuccess);
+    if (!signInSuccess) {
+      reset({ password: '', email: values.email });
+      return;
+    }
+
     router.push('/dashboard');
   };
 

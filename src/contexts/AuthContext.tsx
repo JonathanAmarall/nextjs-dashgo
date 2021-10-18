@@ -1,8 +1,11 @@
 import React from 'react';
-import { setCookie } from 'nookies';
+import { setCookie, parseCookies } from 'nookies';
 import { useToast } from '@chakra-ui/react';
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode, useState, useEffect } from 'react';
 import { api } from '../services/api';
+
+const TOKEN_COOKIE_NAME = 'nextauth.token';
+const REFRESH_TOKEN_COOKIE_NAME = 'nextauth.refreshToken';
 
 interface User {
   email: string;
@@ -33,6 +36,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const toastIdRef = React.useRef<any>();
 
   const isAthenticated = !!user;
+
+  /**Chamado toda vez que e */
+  useEffect(() => {
+    try {
+      const { 'nextauth.token': token } = parseCookies();
+      if (token) {
+        api.get('/me').then((res) => {
+          const { email, roles, permissions } = res.data;
+          setUser({ email, roles, permissions });
+        });
+      }
+    } catch (error) {}
+  }, []);
+
   async function signIn({
     email,
     password,
@@ -42,23 +59,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { token, refreshToken, roles, permissions } = response.data;
 
       if (response.status == 200) {
-        setCookie(undefined, 'nextauth.token', token, {
+        setCookie(undefined, TOKEN_COOKIE_NAME, token, {
           maxAge: 60 * 60 * 24 * 30, // 30 days
           path: '/', // caminhos da app que tem permissao ao cookie
         });
-        setCookie(undefined, 'nextauth.refreshToken', refreshToken, {
+        setCookie(undefined, REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
           maxAge: 60 * 60 * 24 * 30, // 30 days
           path: '/', // caminhos da app que tem permissao ao cookie
+        });
+        setUser({ email, permissions, roles });
+
+        toastIdRef.current = toast({
+          description: `Seja bem vindo, ${email}`,
+          status: 'success',
+          position: 'bottom-right',
         });
 
-        setUser({ email, permissions, roles });
+        api.defaults.headers['Authorization'] = `Bearer ${token}`;
+        return true;
       }
-      toastIdRef.current = toast({
-        description: `Seja bem vindo, ${email}`,
-        status: 'success',
-        position: 'bottom-right',
-      });
-      return true;
+      return false;
     } catch (error) {
       toastIdRef.current = toast({
         description: 'Usuário ou senha invalido',
