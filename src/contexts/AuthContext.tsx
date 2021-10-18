@@ -1,4 +1,5 @@
 import React from 'react';
+import { setCookie } from 'nookies';
 import { useToast } from '@chakra-ui/react';
 import { createContext, ReactNode, useState } from 'react';
 import { api } from '../services/api';
@@ -38,9 +39,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }: SignInCredentials): Promise<boolean> {
     try {
       const response = await api.post<any>('sessions', { email, password });
-      const { roles, permissions } = response.data;
+      const { token, refreshToken, roles, permissions } = response.data;
 
       if (response.status == 200) {
+        setCookie(undefined, 'nextauth.token', token, {
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: '/', // caminhos da app que tem permissao ao cookie
+        });
+        setCookie(undefined, 'nextauth.refreshToken', refreshToken, {
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: '/', // caminhos da app que tem permissao ao cookie
+        });
+
         setUser({ email, permissions, roles });
       }
       toastIdRef.current = toast({
