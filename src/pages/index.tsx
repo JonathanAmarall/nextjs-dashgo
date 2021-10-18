@@ -1,20 +1,16 @@
-import { Flex } from '@chakra-ui/layout';
-import {
-  Button,
-  Stack,
-  FormControl,
-  useToast,
-  ToastOptions,
-} from '@chakra-ui/react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { Input } from '../components/Form/Input';
-
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/dist/client/router';
+import { GetServerSideProps } from 'next';
+
+import { Flex } from '@chakra-ui/layout';
+import { Button, Stack, FormControl, useToast } from '@chakra-ui/react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { parseCookies } from 'nookies';
+
+import { Input } from '../components/Form/Input';
+import { AuthContext } from '../contexts/AuthContext';
 
 type SignInFormData = {
   email: string;
@@ -97,3 +93,18 @@ export default function SignIn() {
     </Flex>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookies = parseCookies(context);
+
+  if (cookies['nextauth.token']) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+};
