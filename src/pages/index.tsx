@@ -7,7 +7,6 @@ import { Button, Stack, FormControl, useToast } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { parseCookies } from 'nookies';
 
 import { Input } from '../components/Form/Input';
 import { AuthContext } from '../contexts/AuthContext';
@@ -40,7 +39,6 @@ export default function SignIn() {
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (values, event) => {
     const signInSuccess = await signIn(values);
-    console.log('signInSuccess', signInSuccess);
     if (!signInSuccess) {
       reset({ password: '', email: values.email });
       return;

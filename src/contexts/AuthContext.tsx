@@ -2,8 +2,8 @@ import React from 'react';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import { useToast } from '@chakra-ui/react';
 import { createContext, ReactNode, useState, useEffect } from 'react';
-import { api } from '../services/api';
 import router from 'next/router';
+import { api } from '../services/apiClient';
 
 const TOKEN_COOKIE_NAME = 'nextauth.token';
 const REFRESH_TOKEN_COOKIE_NAME = 'nextauth.refreshToken';
@@ -21,6 +21,7 @@ interface SignInCredentials {
 
 interface AuthContextData {
   signIn(credentials: SignInCredentials): Promise<boolean>;
+  signOut(): void;
   isAthenticated: boolean;
   user?: User;
 }
@@ -103,7 +104,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ isAthenticated, signIn, user }}>
+    <AuthContext.Provider value={{ isAthenticated, signIn, user, signOut }}>
       {children}
     </AuthContext.Provider>
   );

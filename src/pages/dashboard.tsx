@@ -7,6 +7,7 @@ import { ApexOptions } from 'apexcharts';
 import { Header } from '../components/Header/Index';
 import { Sidebar } from '../components/Sidebar';
 import { AuthContext } from '../contexts/AuthContext';
+import { withSSRAuth } from '../utils/withSSRAuth';
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false, // carregado apenas pelo lado do browser
@@ -90,3 +91,9 @@ export default function Dashboard() {
     </Flex>
   );
 }
+
+export const getServerSideProps = withSSRAuth(async (context) => {
+  return {
+    props: {},
+  };
+});
