@@ -11,6 +11,7 @@ import { parseCookies } from 'nookies';
 
 import { Input } from '../components/Form/Input';
 import { AuthContext } from '../contexts/AuthContext';
+import { withSSTGuest } from '../utils/withSSRGuest';
 
 type SignInFormData = {
   email: string;
@@ -94,17 +95,8 @@ export default function SignIn() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookies = parseCookies(context);
-
-  if (cookies['nextauth.token']) {
-    return {
-      redirect: {
-        destination: '/dashboard',
-        permanent: false,
-      },
-    };
+export const getServerSideProps: GetServerSideProps = withSSTGuest(
+  async (context) => {
+    return { props: {} };
   }
-
-  return { props: {} };
-};
+);
