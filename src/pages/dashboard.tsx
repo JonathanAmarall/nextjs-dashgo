@@ -8,6 +8,9 @@ import { Header } from '../components/Header/Index';
 import { Sidebar } from '../components/Sidebar';
 import { AuthContext } from '../contexts/AuthContext';
 import { withSSRAuth } from '../utils/withSSRAuth';
+import { setupApiClient } from '../services/api';
+import { AuthTokenError } from '../services/errors/AuthTokenError';
+import { destroyCookie } from 'nookies';
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false, // carregado apenas pelo lado do browser
@@ -93,6 +96,10 @@ export default function Dashboard() {
 }
 
 export const getServerSideProps = withSSRAuth(async (context) => {
+  // exemplo de request no lado servidor
+  const apiClient = await setupApiClient(context);
+  const response = apiClient.get('/me');
+
   return {
     props: {},
   };
